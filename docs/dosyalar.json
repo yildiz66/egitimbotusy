@@ -1,13 +1,35 @@
 {
   "okul_adi": "Fatma Temel Turhan Ortaokulu",
-  "guncellendi": "22.03.2026 15:52",
+  "guncellendi": "22.03.2026 17:39",
   "ozet": {
-    "plan": 3,
+    "plan": 6,
     "tutanak": 0,
     "rehberlik": 0,
-    "toplam": 3
+    "toplam": 6
   },
   "dosyalar": [
+    {
+      "ad": "GunlukPlan_20260323_7E_Ay'ın_Hareketleri.docx",
+      "tur": "gunluk_planlar",
+      "etiket": "Günlük Plan",
+      "renk": "blue",
+      "ikon": "📚",
+      "boyut_kb": 37.5,
+      "tarih": "22.03.2026",
+      "tarih_ts": 1774201151,
+      "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_7E_Ay'ın_Hareketleri.docx"
+    },
+    {
+      "ad": "GunlukPlan_20260323_7B_Ay'ın_Hareketleri.docx",
+      "tur": "gunluk_planlar",
+      "etiket": "Günlük Plan",
+      "renk": "blue",
+      "ikon": "📚",
+      "boyut_kb": 37.5,
+      "tarih": "22.03.2026",
+      "tarih_ts": 1774201151,
+      "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_7B_Ay'ın_Hareketleri.docx"
+    },
     {
       "ad": "GunlukPlan_20260323_7A_Ay'ın_Hareketleri.docx",
       "tur": "gunluk_planlar",
@@ -16,8 +38,19 @@
       "ikon": "📚",
       "boyut_kb": 37.6,
       "tarih": "22.03.2026",
-      "tarih_ts": 1774194740,
+      "tarih_ts": 1774201129,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_7A_Ay'ın_Hareketleri.docx"
+    },
+    {
+      "ad": "GunlukPlan_20260323_6F_Lütfen_Maarif_yıllık.docx",
+      "tur": "gunluk_planlar",
+      "etiket": "Günlük Plan",
+      "renk": "blue",
+      "ikon": "📚",
+      "boyut_kb": 37.7,
+      "tarih": "22.03.2026",
+      "tarih_ts": 1774201151,
+      "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_6F_Lütfen_Maarif_yıllık.docx"
     },
     {
       "ad": "GunlukPlan_20260323_6C_Lütfen_Maarif_yıllık.docx",
@@ -27,7 +60,7 @@
       "ikon": "📚",
       "boyut_kb": 37.7,
       "tarih": "22.03.2026",
-      "tarih_ts": 1774194740,
+      "tarih_ts": 1774201129,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_6C_Lütfen_Maarif_yıllık.docx"
     },
     {
@@ -38,7 +71,7 @@
       "ikon": "📚",
       "boyut_kb": 37.5,
       "tarih": "22.03.2026",
-      "tarih_ts": 1774194709,
+      "tarih_ts": 1774201129,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_6C_Canlıların_Sınıfland.docx"
     }
   ]
