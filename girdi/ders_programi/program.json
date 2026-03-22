@@ -1,21 +1,36 @@
 {
   "Pazartesi": [
-    {"saat": "08:00", "sinif": "7-A"},
-    {"saat": "10:00", "sinif": "6-C"}
+    {"saat": "08:40", "sinif": "7-E"},
+    {"saat": "09:30", "sinif": "7-E"},
+    {"saat": "10:20", "sinif": "7-B"},
+    {"saat": "11:10", "sinif": "7-B"},
+    {"saat": "13:35", "sinif": "6-F"},
+    {"saat": "14:30", "sinif": "6-F"}
   ],
   "Salı": [
-    {"saat": "08:00", "sinif": "8-B"},
-    {"saat": "11:00", "sinif": "6-C"}
+    {"saat": "08:40", "sinif": "8-A"},
+    {"saat": "09:30", "sinif": "8-A"},
+    {"saat": "10:20", "sinif": "6-E"},
+    {"saat": "11:10", "sinif": "6-E"},
+    {"saat": "13:35", "sinif": "6-C"},
+    {"saat": "14:30", "sinif": "6-C"}
   ],
   "Çarşamba": [
-    {"saat": "09:00", "sinif": "7-A"},
-    {"saat": "11:00", "sinif": "8-B"}
+    {"saat": "08:40", "sinif": "7-B"},
+    {"saat": "09:30", "sinif": "7-B"},
+    {"saat": "10:20", "sinif": "6-C"},
+    {"saat": "11:10", "sinif": "6-C"},
+    {"saat": "12:00", "sinif": "6-F"},
+    {"saat": "13:35", "sinif": "6-F"}
   ],
   "Perşembe": [
-    {"saat": "08:00", "sinif": "6-C"},
-    {"saat": "10:00", "sinif": "7-A"}
+    {"saat": "08:40", "sinif": "7-E"},
+    {"saat": "09:30", "sinif": "7-E"},
+    {"saat": "10:20", "sinif": "6-F"},
+    {"saat": "11:10", "sinif": "6-E"},
+    {"saat": "12:00", "sinif": "6-E"},
+    {"saat": "13:35", "sinif": "8-A"},
+    {"saat": "14:30", "sinif": "8-A"}
   ],
-  "Cuma": [
-    {"saat": "09:00", "sinif": "8-B"}
-  ]
+  "Cuma": []
 }
