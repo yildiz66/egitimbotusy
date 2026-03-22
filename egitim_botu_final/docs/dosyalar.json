@@ -1,0 +1,78 @@
+{
+  "okul_adi": "Eğitim Asistanı",
+  "guncellendi": "22.03.2026 14:51",
+  "ozet": {
+    "plan": 2,
+    "tutanak": 3,
+    "rehberlik": 1,
+    "toplam": 6
+  },
+  "dosyalar": [
+    {
+      "ad": "Tutanak_Zümre_2026_03.docx",
+      "tur": "zumre",
+      "etiket": "Zümre",
+      "renk": "green",
+      "ikon": "📗",
+      "boyut_kb": 37.1,
+      "tarih": "22.03.2026",
+      "tarih_ts": 1774190215,
+      "url": "../cikti/tutanaklar/zumre/Tutanak_Zümre_2026_03.docx"
+    },
+    {
+      "ad": "Tutanak_Veli_2026_03.docx",
+      "tur": "veli",
+      "etiket": "Veli",
+      "renk": "purple",
+      "ikon": "👨‍👩‍👧",
+      "boyut_kb": 37.0,
+      "tarih": "22.03.2026",
+      "tarih_ts": 1774190215,
+      "url": "../cikti/tutanaklar/veli/Tutanak_Veli_2026_03.docx"
+    },
+    {
+      "ad": "Tutanak_ŞÖK_2026_03.docx",
+      "tur": "sok",
+      "etiket": "ŞÖK",
+      "renk": "blue",
+      "ikon": "📋",
+      "boyut_kb": 37.1,
+      "tarih": "22.03.2026",
+      "tarih_ts": 1774190215,
+      "url": "../cikti/tutanaklar/sok/Tutanak_ŞÖK_2026_03.docx"
+    },
+    {
+      "ad": "Rehberlik_6C_2026_03.docx",
+      "tur": "rehberlik",
+      "etiket": "Rehberlik",
+      "renk": "amber",
+      "ikon": "💛",
+      "boyut_kb": 37.0,
+      "tarih": "22.03.2026",
+      "tarih_ts": 1774190215,
+      "url": "../cikti/rehberlik/Rehberlik_6C_2026_03.docx"
+    },
+    {
+      "ad": "GunlukPlan_20260323_7A_Lütfen_Maarif_yıllık.docx",
+      "tur": "gunluk_planlar",
+      "etiket": "Günlük Plan",
+      "renk": "blue",
+      "ikon": "📚",
+      "boyut_kb": 37.7,
+      "tarih": "22.03.2026",
+      "tarih_ts": 1774191085,
+      "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_7A_Lütfen_Maarif_yıllık.docx"
+    },
+    {
+      "ad": "GunlukPlan_20260323_6C_Canlıların_Sınıfland.docx",
+      "tur": "gunluk_planlar",
+      "etiket": "Günlük Plan",
+      "renk": "blue",
+      "ikon": "📚",
+      "boyut_kb": 37.5,
+      "tarih": "22.03.2026",
+      "tarih_ts": 1774191085,
+      "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_6C_Canlıların_Sınıfland.docx"
+    }
+  ]
+}

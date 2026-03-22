@@ -1,0 +1,21 @@
+{
+  "Pazartesi": [
+    {"saat": "08:00", "sinif": "7-A"},
+    {"saat": "10:00", "sinif": "6-C"}
+  ],
+  "Salı": [
+    {"saat": "08:00", "sinif": "8-B"},
+    {"saat": "11:00", "sinif": "6-C"}
+  ],
+  "Çarşamba": [
+    {"saat": "09:00", "sinif": "7-A"},
+    {"saat": "11:00", "sinif": "8-B"}
+  ],
+  "Perşembe": [
+    {"saat": "08:00", "sinif": "6-C"},
+    {"saat": "10:00", "sinif": "7-A"}
+  ],
+  "Cuma": [
+    {"saat": "09:00", "sinif": "8-B"}
+  ]
+}
