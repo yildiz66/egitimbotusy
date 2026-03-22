@@ -1,11 +1,11 @@
 {
   "okul_adi": "Fatma Temel Turhan Ortaokulu",
-  "guncellendi": "22.03.2026 18:03",
+  "guncellendi": "22.03.2026 18:25",
   "ozet": {
-    "plan": 6,
+    "plan": 9,
     "tutanak": 0,
     "rehberlik": 0,
-    "toplam": 6
+    "toplam": 9
   },
   "dosyalar": [
     {
@@ -16,8 +16,19 @@
       "ikon": "📚",
       "boyut_kb": 37.5,
       "tarih": "22.03.2026",
-      "tarih_ts": 1774202629,
+      "tarih_ts": 1774203869,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_7E_Ay'ın_Hareketleri.docx"
+    },
+    {
+      "ad": "GunlukPlan_20260323_7E_.docx",
+      "tur": "gunluk_planlar",
+      "etiket": "Günlük Plan",
+      "renk": "blue",
+      "ikon": "📚",
+      "boyut_kb": 37.6,
+      "tarih": "22.03.2026",
+      "tarih_ts": 1774203912,
+      "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_7E_.docx"
     },
     {
       "ad": "GunlukPlan_20260323_7B_Ay'ın_Hareketleri.docx",
@@ -27,8 +38,19 @@
       "ikon": "📚",
       "boyut_kb": 37.5,
       "tarih": "22.03.2026",
-      "tarih_ts": 1774202629,
+      "tarih_ts": 1774203869,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_7B_Ay'ın_Hareketleri.docx"
+    },
+    {
+      "ad": "GunlukPlan_20260323_7B_.docx",
+      "tur": "gunluk_planlar",
+      "etiket": "Günlük Plan",
+      "renk": "blue",
+      "ikon": "📚",
+      "boyut_kb": 37.6,
+      "tarih": "22.03.2026",
+      "tarih_ts": 1774203912,
+      "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_7B_.docx"
     },
     {
       "ad": "GunlukPlan_20260323_7A_Ay'ın_Hareketleri.docx",
@@ -38,7 +60,7 @@
       "ikon": "📚",
       "boyut_kb": 37.6,
       "tarih": "22.03.2026",
-      "tarih_ts": 1774202612,
+      "tarih_ts": 1774203869,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_7A_Ay'ın_Hareketleri.docx"
     },
     {
@@ -49,8 +71,19 @@
       "ikon": "📚",
       "boyut_kb": 37.7,
       "tarih": "22.03.2026",
-      "tarih_ts": 1774202630,
+      "tarih_ts": 1774203869,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_6F_Lütfen_Maarif_yıllık.docx"
+    },
+    {
+      "ad": "GunlukPlan_20260323_6F_.docx",
+      "tur": "gunluk_planlar",
+      "etiket": "Günlük Plan",
+      "renk": "blue",
+      "ikon": "📚",
+      "boyut_kb": 37.7,
+      "tarih": "22.03.2026",
+      "tarih_ts": 1774203912,
+      "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_6F_.docx"
     },
     {
       "ad": "GunlukPlan_20260323_6C_Lütfen_Maarif_yıllık.docx",
@@ -60,7 +93,7 @@
       "ikon": "📚",
       "boyut_kb": 37.7,
       "tarih": "22.03.2026",
-      "tarih_ts": 1774202612,
+      "tarih_ts": 1774203869,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_6C_Lütfen_Maarif_yıllık.docx"
     },
     {
@@ -71,7 +104,7 @@
       "ikon": "📚",
       "boyut_kb": 37.5,
       "tarih": "22.03.2026",
-      "tarih_ts": 1774202612,
+      "tarih_ts": 1774203869,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_6C_Canlıların_Sınıfland.docx"
     }
   ]
