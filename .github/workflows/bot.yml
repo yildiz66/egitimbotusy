@@ -1,1 +1,53 @@
+name: Egitim Asistani Botu
 
+on:
+  schedule:
+    - cron: "0 15 * * 1-5"
+    - cron: "0 5 1 * *"
+  workflow_dispatch:
+    inputs:
+      sadece:
+        description: "hepsi / plan / tutanak / rehberlik"
+        default: "hepsi"
+      test_modu:
+        description: "true / false"
+        default: "false"
+
+jobs:
+  calistir:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Tesseract OCR kur
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-tur
+      - name: Python kutuphaneleri kur
+        run: pip install python-docx openpyxl pdfplumber pillow pytesseract requests
+      - name: Botu calistir
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID:   ${{ secrets.TELEGRAM_CHAT_ID }}
+          OKUL_ADI:           ${{ secrets.OKUL_ADI }}
+          OGRETMEN_ADI:       ${{ secrets.OGRETMEN_ADI }}
+          DERS:               ${{ secrets.DERS }}
+          SINIFLAR:           ${{ secrets.SINIFLAR }}
+          REHBERLIK_SINIF:    ${{ secrets.REHBERLIK_SINIF }}
+          GEMINI_API_KEY:     ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          cd scripts
+          FLAGS="--sadece ${{ github.event.inputs.sadece || 'hepsi' }}"
+          [ "${{ github.event.inputs.test_modu }}" = "true" ] && FLAGS="$FLAGS --test"
+          python bot.py $FLAGS
+      - name: Kaydet ve push
+        run: |
+          git config user.name "egitim-botu"
+          git config user.email "bot@github.com"
+          git add cikti/ docs/
+          git diff --staged --quiet || git commit -m "Otoplan $(date +'%d.%m.%Y')"
+          git push
