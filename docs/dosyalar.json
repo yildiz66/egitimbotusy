@@ -1,11 +1,11 @@
 {
   "okul_adi": "Fatma Temel Turhan Ortaokulu",
-  "guncellendi": "22.03.2026 15:43",
+  "guncellendi": "22.03.2026 15:52",
   "ozet": {
-    "plan": 2,
+    "plan": 3,
     "tutanak": 0,
     "rehberlik": 0,
-    "toplam": 2
+    "toplam": 3
   },
   "dosyalar": [
     {
@@ -16,8 +16,19 @@
       "ikon": "📚",
       "boyut_kb": 37.6,
       "tarih": "22.03.2026",
-      "tarih_ts": 1774194175,
+      "tarih_ts": 1774194740,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_7A_Ay'ın_Hareketleri.docx"
+    },
+    {
+      "ad": "GunlukPlan_20260323_6C_Lütfen_Maarif_yıllık.docx",
+      "tur": "gunluk_planlar",
+      "etiket": "Günlük Plan",
+      "renk": "blue",
+      "ikon": "📚",
+      "boyut_kb": 37.7,
+      "tarih": "22.03.2026",
+      "tarih_ts": 1774194740,
+      "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_6C_Lütfen_Maarif_yıllık.docx"
     },
     {
       "ad": "GunlukPlan_20260323_6C_Canlıların_Sınıfland.docx",
@@ -27,7 +38,7 @@
       "ikon": "📚",
       "boyut_kb": 37.5,
       "tarih": "22.03.2026",
-      "tarih_ts": 1774194176,
+      "tarih_ts": 1774194709,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_6C_Canlıların_Sınıfland.docx"
     }
   ]
