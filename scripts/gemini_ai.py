@@ -68,8 +68,13 @@ def _json_cikart(metin: str) -> dict | None:
 
 
 def gunluk_plan_olustur(sinif: str, ders: str, konu: str,
-                         kazanim: str, model: str, sure_dk: int = 80) -> dict:
-    """Kazanıma özel ders akışı. Cache ile kota tasarrufu."""
+                         kazanim: str, model: str, sure_dk: int = 80,
+                         kitap_icerigi: str = "", eski_plan: str = "") -> dict:
+    """
+    Kazanıma özel ders akışı.
+    kitap_icerigi: Ders kitabından ilgili bölüm (etkinlik + değerlendirme dahil)
+    eski_plan: Önceki yıllarda yapılan benzer plan örneği
+    """
     if not GROQ_API_KEY or not konu:
         return {}
 
@@ -86,8 +91,24 @@ def gunluk_plan_olustur(sinif: str, ders: str, konu: str,
         "MEB normal müfredatına uygun etkinlikler."
     )
 
+    # Ders kitabı ve eski plan bilgilerini ekle
+    ek_bilgi = ""
+    if kitap_icerigi:
+        ek_bilgi += f"
+
+DERS KİTABI İÇERİĞİ (ilgili bölüm):
+{kitap_icerigi[:800]}"
+    if eski_plan:
+        ek_bilgi += f"
+
+ÖNCEKİ YIL BENZER PLAN ÖRNEĞİ:
+{eski_plan[:600]}"
+
     prompt = f"""Türk ortaokulu {seviye}. sınıf için {sure_dk} dakikalık ders planı hazırla.
-Ders: {ders} | Konu: {konu} | Kazanım: {kazanim} | {model_notu}
+Ders: {ders} | Konu: {konu} | Kazanım: {kazanim} | {model_notu}{ek_bilgi}
+
+Ders kitabındaki etkinlikleri ve değerlendirme sorularını plana dahil et.
+Varsa eski plan stilini benimse ama içeriği güncelle.
 
 SADECE JSON döndür, başka hiçbir şey yazma:
 {{
