@@ -97,6 +97,22 @@ def calistir(test=False, sadece="hepsi"):
 
             dosyalar = []
             for d in zengin:
+                sinif    = d["sinif"]
+                seviye   = sinif.split("-")[0]
+                konu     = d.get("konu", "")
+
+                # Ders kitabından ilgili bölümü çek
+                kitap_icerigi = belgeler.ders_kitabi_bolumleri(seviye, konu)
+                if kitap_icerigi:
+                    print(f"   📖 Ders kitabı bölümü bulundu: {sinif}")
+
+                # Eski planlardan örnek al
+                eski_plan = belgeler.eski_plan_metni(seviye)
+
+                # Groq'a hem kitap içeriğini hem eski planı ver
+                d["kitap_icerigi"] = kitap_icerigi
+                d["eski_plan"]     = eski_plan
+
                 f = uretici.uret(yarin, d)
                 dosyalar.append(f)
                 print(f"   OK  {f.name}")
@@ -166,5 +182,3 @@ if __name__ == "__main__":
                     choices=["hepsi","plan","tutanak","rehberlik"])
     args = ap.parse_args()
     calistir(test=args.test, sadece=args.sadece)
-
-
