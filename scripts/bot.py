@@ -68,18 +68,26 @@ def calistir(test=False, sadece="hepsi"):
                 Path(__file__).parent.parent / "girdi" / "yeni_belgeler"
             )
 
+            # Aynı sınıfı tek plana birleştir — kota tasarrufu
             zengin = []
+            goruldu = {}
             for d in ham_ders:
                 sinif = d["sinif"]
+                if sinif in goruldu:
+                    continue
+                goruldu[sinif] = True
                 model = K.SINIFLAR.get(sinif, "normal")
                 bilgi = plan_okuyucu.hafta_bilgisi_al(sinif, model, yarin)
+                saat_sayisi = sum(1 for x in ham_ders if x["sinif"] == sinif)
+                ilk_saat    = next(x["saat"] for x in ham_ders if x["sinif"] == sinif)
                 zengin.append({
-                    "sinif":     sinif,
-                    "model":     model,
-                    "saat":      d["saat"],
-                    "konu":      bilgi["konu"],
-                    "unite":     bilgi.get("unite", ""),
-                    "kazanim":   bilgi["kazanim"],
+                    "sinif":      sinif,
+                    "model":      model,
+                    "saat":       ilk_saat,
+                    "sure":       f"{saat_sayisi * 40} dk ({saat_sayisi} ders saati)",
+                    "konu":       bilgi["konu"],
+                    "unite":      bilgi.get("unite", ""),
+                    "kazanim":    bilgi["kazanim"],
                     "simulasyon": bilgi.get("simulasyon", ""),
                 })
 
@@ -158,3 +166,5 @@ if __name__ == "__main__":
                     choices=["hepsi","plan","tutanak","rehberlik"])
     args = ap.parse_args()
     calistir(test=args.test, sadece=args.sadece)
+
+
