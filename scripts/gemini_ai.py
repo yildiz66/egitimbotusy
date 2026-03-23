@@ -85,33 +85,52 @@ def gunluk_plan_olustur(sinif: str, ders: str, konu: str,
         print(f"   ♻️  Cache: {sinif} — {konu[:30]}")
         return _PLAN_CACHE[cache_key]
 
-    model_notu = (
-        "Maarif modeli — değerler eğitimi ve Maarif vizyonuna uygun etkinlikler ekle."
-        if model == "maarif" else
-        "MEB normal müfredatına uygun etkinlikler."
-    )
+    if model == "maarif":
+        model_notu = (
+            "TURKİYE YÜZYILI MAALİF MODELİ (TYMM) formatinda plan hazirla. "
+            "Su bolumler EKSIKSIZ doldurulmali: "
+            "Ogrenme Ciktisi (FB kodu), Alt Ogrenme Ciktilari (a/b/c), "
+            "Surec Bilesenleri, Egilimler (en az 2), Kavramsal Beceriler (en az 2), "
+            "Sosyal-Duygusal Ogrenme (SDB kodu), Erdem-Deger-Eylem (somut), "
+            "Farklilaştirma Zenginlestirme, Farklilaştirma Destekleme, "
+            "Ogrenme Kanitlari. "
+            "Ders kitabi icerigindeki etkinlikleri ve sorulari plana dahil et."
+        )
+    else:
+        model_notu = "MEB normal mufredatina uygun, MEB kazanim kodlari (F.X.X.X.X) ile plan hazirla."
 
     # Ders kitabı ve eski plan bilgilerini ekle
     ek_bilgi = ""
     if kitap_icerigi:
-        ek_bilgi += f"
-
-DERS KİTABI İÇERİĞİ (ilgili bölüm):
-{kitap_icerigi[:800]}"
+        ek_bilgi += "\n\nDERS KİTABI İÇERİĞİ (etkinlik ve sorular dahil):\n" + kitap_icerigi[:800]
     if eski_plan:
-        ek_bilgi += f"
+        ek_bilgi += "\n\nÖNCEKİ YIL BENZER PLAN ÖRNEĞİ (stilini kullan):\n" + eski_plan[:600]
 
-ÖNCEKİ YIL BENZER PLAN ÖRNEĞİ:
-{eski_plan[:600]}"
-
-    prompt = f"""Türk ortaokulu {seviye}. sınıf için {sure_dk} dakikalık ders planı hazırla.
-Ders: {ders} | Konu: {konu} | Kazanım: {kazanim} | {model_notu}{ek_bilgi}
-
-Ders kitabındaki etkinlikleri ve değerlendirme sorularını plana dahil et.
-Varsa eski plan stilini benimse ama içeriği güncelle.
-
-SADECE JSON döndür, başka hiçbir şey yazma:
-{{
+    if model == "maarif":
+        json_format = """{{
+  "ders_akisi": [
+    {{"sure": "0-10 dk", "asama": "Öğrenmeye Hazırlık", "etkinlik": "..."}},
+    {{"sure": "10-30 dk", "asama": "Keşfetme ve Araştırma", "etkinlik": "..."}},
+    {{"sure": "30-50 dk", "asama": "Açıklama ve Tartışma", "etkinlik": "..."}},
+    {{"sure": "50-65 dk", "asama": "Uygulama ve Derinleştirme", "etkinlik": "..."}},
+    {{"sure": "65-80 dk", "asama": "Değerlendirme ve Yansıtma", "etkinlik": "..."}}
+  ],
+  "ogrenme_ciktisi": "FB.{seviye}.X.X — Tam ifade",
+  "surec_bilesenleri": "a) ... b) ... c) ...",
+  "egilimler": "Meraklı, Araştırmacı",
+  "kavramsal_beceriler": "Sınıflama, Karşılaştırma",
+  "sosyal_duygusal": "SDB1.2 — Kendini Düzenleme: ...",
+  "erdem_deger_eylem": "Değer: Sorumluluk | Eylem: ...",
+  "farklilaştirma_zenginlestirme": "İleri düzey öğrenciler için ek etkinlik: ...",
+  "farklilaştirma_destekleme": "Güçlük çeken öğrenciler için destek: ...",
+  "ogrenme_kanitlari": "Gözlem formu ve performans görevi",
+  "simulasyon": "https://phet.colorado.edu/tr/...",
+  "materyal": "Ders kitabı, deney malzemeleri",
+  "odev": "...",
+  "degerlendirme_sorulari": ["Soru 1?", "Soru 2?", "Soru 3?"]
+}}"""
+    else:
+        json_format = """{{
   "ders_akisi": [
     {{"sure": "0-5 dk", "asama": "Giriş", "etkinlik": "..."}},
     {{"sure": "5-15 dk", "asama": "Motivasyon", "etkinlik": "..."}},
@@ -121,11 +140,21 @@ SADECE JSON döndür, başka hiçbir şey yazma:
     {{"sure": "65-75 dk", "asama": "Değerlendirme", "etkinlik": "..."}},
     {{"sure": "75-80 dk", "asama": "Kapanış", "etkinlik": "..."}}
   ],
-  "simulasyon": "https://phet.colorado.edu/tr/... veya uygun link",
+  "simulasyon": "https://phet.colorado.edu/tr/...",
   "materyal": "Gerekli materyal listesi",
   "odev": "Ev ödevi",
   "degerlendirme_sorulari": ["Soru 1?", "Soru 2?", "Soru 3?"]
 }}"""
+
+    prompt = f"""Türk ortaokulu {seviye}. sınıf için {sure_dk} dakikalık ders planı hazırla.
+Ders: {ders} | Konu: {konu} | Kazanım: {kazanim}
+{model_notu}{ek_bilgi}
+
+Ders kitabındaki etkinlikleri ve değerlendirme sorularını plana dahil et.
+Varsa eski plan stilini benimse ama içeriği güncelle.
+
+SADECE JSON döndür, başka hiçbir şey yazma:
+{json_format}"""
 
     print(f"   🤖 Groq plan yazıyor: {seviye}. sınıf — {konu[:40]}")
     yanit = _groq_cagir(prompt, max_token=1500)
