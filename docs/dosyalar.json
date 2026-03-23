@@ -1,13 +1,46 @@
 {
   "okul_adi": "Fatma Temel Turhan Ortaokulu",
-  "guncellendi": "22.03.2026 20:52",
+  "guncellendi": "23.03.2026 09:26",
   "ozet": {
-    "plan": 12,
+    "plan": 15,
     "tutanak": 0,
     "rehberlik": 0,
-    "toplam": 12
+    "toplam": 15
   },
   "dosyalar": [
+    {
+      "ad": "GunlukPlan_20260324_8A_8.7.1._Elektrik_Yükl.docx",
+      "tur": "gunluk_planlar",
+      "etiket": "Günlük Plan",
+      "renk": "blue",
+      "ikon": "📚",
+      "boyut_kb": 37.6,
+      "tarih": "23.03.2026",
+      "tarih_ts": 1774258010,
+      "url": "../cikti/gunluk_planlar/GunlukPlan_20260324_8A_8.7.1._Elektrik_Yükl.docx"
+    },
+    {
+      "ad": "GunlukPlan_20260324_6E_Elektriksel_Direnç_v.docx",
+      "tur": "gunluk_planlar",
+      "etiket": "Günlük Plan",
+      "renk": "blue",
+      "ikon": "📚",
+      "boyut_kb": 37.9,
+      "tarih": "23.03.2026",
+      "tarih_ts": 1774258010,
+      "url": "../cikti/gunluk_planlar/GunlukPlan_20260324_6E_Elektriksel_Direnç_v.docx"
+    },
+    {
+      "ad": "GunlukPlan_20260324_6C_Elektriksel_Direnç_v.docx",
+      "tur": "gunluk_planlar",
+      "etiket": "Günlük Plan",
+      "renk": "blue",
+      "ikon": "📚",
+      "boyut_kb": 37.9,
+      "tarih": "23.03.2026",
+      "tarih_ts": 1774258011,
+      "url": "../cikti/gunluk_planlar/GunlukPlan_20260324_6C_Elektriksel_Direnç_v.docx"
+    },
     {
       "ad": "GunlukPlan_20260323_7E_Ay'ın_Hareketleri.docx",
       "tur": "gunluk_planlar",
@@ -15,8 +48,8 @@
       "renk": "blue",
       "ikon": "📚",
       "boyut_kb": 37.5,
-      "tarih": "22.03.2026",
-      "tarih_ts": 1774212298,
+      "tarih": "23.03.2026",
+      "tarih_ts": 1774257575,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_7E_Ay'ın_Hareketleri.docx"
     },
     {
@@ -26,8 +59,8 @@
       "renk": "blue",
       "ikon": "📚",
       "boyut_kb": 37.6,
-      "tarih": "22.03.2026",
-      "tarih_ts": 1774212728,
+      "tarih": "23.03.2026",
+      "tarih_ts": 1774257575,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_7E_7.6.2._Bitki_ve_Hayv.docx"
     },
     {
@@ -37,8 +70,8 @@
       "renk": "blue",
       "ikon": "📚",
       "boyut_kb": 37.6,
-      "tarih": "22.03.2026",
-      "tarih_ts": 1774212298,
+      "tarih": "23.03.2026",
+      "tarih_ts": 1774257575,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_7E_.docx"
     },
     {
@@ -48,8 +81,8 @@
       "renk": "blue",
       "ikon": "📚",
       "boyut_kb": 37.5,
-      "tarih": "22.03.2026",
-      "tarih_ts": 1774212298,
+      "tarih": "23.03.2026",
+      "tarih_ts": 1774257575,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_7B_Ay'ın_Hareketleri.docx"
     },
     {
@@ -59,8 +92,8 @@
       "renk": "blue",
       "ikon": "📚",
       "boyut_kb": 37.6,
-      "tarih": "22.03.2026",
-      "tarih_ts": 1774212728,
+      "tarih": "23.03.2026",
+      "tarih_ts": 1774257575,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_7B_7.6.2._Bitki_ve_Hayv.docx"
     },
     {
@@ -70,8 +103,8 @@
       "renk": "blue",
       "ikon": "📚",
       "boyut_kb": 37.6,
-      "tarih": "22.03.2026",
-      "tarih_ts": 1774212298,
+      "tarih": "23.03.2026",
+      "tarih_ts": 1774257575,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_7B_.docx"
     },
     {
@@ -81,8 +114,8 @@
       "renk": "blue",
       "ikon": "📚",
       "boyut_kb": 37.6,
-      "tarih": "22.03.2026",
-      "tarih_ts": 1774212298,
+      "tarih": "23.03.2026",
+      "tarih_ts": 1774257575,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_7A_Ay'ın_Hareketleri.docx"
     },
     {
@@ -92,8 +125,8 @@
       "renk": "blue",
       "ikon": "📚",
       "boyut_kb": 37.7,
-      "tarih": "22.03.2026",
-      "tarih_ts": 1774212298,
+      "tarih": "23.03.2026",
+      "tarih_ts": 1774257575,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_6F_Lütfen_Maarif_yıllık.docx"
     },
     {
@@ -103,8 +136,8 @@
       "renk": "blue",
       "ikon": "📚",
       "boyut_kb": 37.9,
-      "tarih": "22.03.2026",
-      "tarih_ts": 1774212729,
+      "tarih": "23.03.2026",
+      "tarih_ts": 1774257575,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_6F_Elektriksel_Direnç_v.docx"
     },
     {
@@ -114,8 +147,8 @@
       "renk": "blue",
       "ikon": "📚",
       "boyut_kb": 37.7,
-      "tarih": "22.03.2026",
-      "tarih_ts": 1774212298,
+      "tarih": "23.03.2026",
+      "tarih_ts": 1774257575,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_6F_.docx"
     },
     {
@@ -125,8 +158,8 @@
       "renk": "blue",
       "ikon": "📚",
       "boyut_kb": 37.7,
-      "tarih": "22.03.2026",
-      "tarih_ts": 1774212298,
+      "tarih": "23.03.2026",
+      "tarih_ts": 1774257575,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_6C_Lütfen_Maarif_yıllık.docx"
     },
     {
@@ -136,8 +169,8 @@
       "renk": "blue",
       "ikon": "📚",
       "boyut_kb": 37.5,
-      "tarih": "22.03.2026",
-      "tarih_ts": 1774212298,
+      "tarih": "23.03.2026",
+      "tarih_ts": 1774257575,
       "url": "../cikti/gunluk_planlar/GunlukPlan_20260323_6C_Canlıların_Sınıfland.docx"
     }
   ]
