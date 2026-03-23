@@ -38,7 +38,7 @@ jobs:
           DERS:                ${{ secrets.DERS }}
           SINIFLAR:            ${{ secrets.SINIFLAR }}
           REHBERLIK_SINIF:     ${{ secrets.REHBERLIK_SINIF }}
-          GEMINI_API_KEY:      ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY:        ${{ secrets.GROQ_API_KEY }}
           GOOGLE_CREDENTIALS:  ${{ secrets.GOOGLE_CREDENTIALS }}
           DRIVE_YENI_KLASOR:   ${{ secrets.DRIVE_YENI_KLASOR }}
           DRIVE_ESKI_KLASOR:   ${{ secrets.DRIVE_ESKI_KLASOR }}
