@@ -1,75 +1,74 @@
 """
 Belge Yöneticisi
 ================
-Önce Google Drive'a bakar, sonra GitHub'daki klasörlere.
-Sen dosyaları Drive'a atarsın, bot oradan okur.
-
-Klasör yapısı (Drive'da):
-  egitim-botu/
-  ├── yeni_belgeler/   ← yıllık plan, ders kitabı, rehberlik planı
-  └── eski_belgeler/   ← eski tutanaklar, evraklar
-
-Bot:
-  1. Drive'dan dosyaları indirir
-  2. Ne tür belge olduğunu anlar
-  3. Planlara, tutanaklara dahil eder
+Drive ve GitHub'daki dosyaları tarar, türlerine göre sınıflandırır.
+Dosya adından akıllıca tür tahmin eder.
 """
 
-import os
 import re
-import tempfile
 from pathlib import Path
+import tempfile
 from evrensel_okuyucu import dosya_oku, klasor_tara
 
-ANAHTAR_KELIMELER = {
-    "yillik_plan":  ["yıllık plan","yillik plan","ünite","kazanım","hafta","öğretim yılı"],
-    "sok":          ["şube öğretmenler","şök","sok"],
-    "zumre":        ["zümre","zumre"],
-    "veli":         ["veli toplantı","veli bilgilendirme"],
-    "rehberlik":    ["rehberlik","pdr","rehber öğretmen"],
-    "ders_kitabi":  ["ders kitabı","meb yayınları","öğrenci kitabı"],
-    "ders_programi":["ders programı","haftalık program","pazartesi","salı"],
+# ── Dosya adı bazlı kesin kurallar (öncelikli) ──
+AD_KURALLARI = [
+    (r'\d+_sinif_\d+_hafta',           "gunluk_plan"),
+    (r'soktopt|toptut|sok.*tut|tut.*sok', "sok"),
+    (r'zumre|zümre',                   "zumre"),
+    (r'veli.*top|top.*veli',           "veli"),
+    (r'maarif.*rapor|degerlendirme.*rapor|aylik.*rapor', "rehberlik"),
+    (r'rehberlik.*plan|pdr',           "rehberlik"),
+    (r'ders.*kitab|kitab.*fen|\d+.*sinif.*kitap|kitap.*\d+.*sinif', "ders_kitabi"),
+    (r'yillik.*plan|cerc.*eve.*plan',  "yillik_plan"),
+    (r'gunluk.*plan|plan.*gunluk',     "gunluk_plan"),
+]
+
+# ── İçerik bazlı anahtar kelimeler (yedek) ──
+ICERIK_ANAHTARLARI = {
+    "gunluk_plan":  ["günlük plan","ders akışı","kazanım","süre","aşama","etkinlik","öğretmen adı"],
+    "yillik_plan":  ["yıllık plan","ünite","hafta","öğretim yılı","kazanım kodu"],
+    "sok":          ["şube öğretmenler","şök","toplantı tutanağı","gündem"],
+    "zumre":        ["zümre","zümre öğretmenler"],
+    "veli":         ["veli toplantı","veli bilgilendirme","velilere"],
+    "rehberlik":    ["rehberlik","pdr","rehber öğretmen","bireysel görüşme"],
+    "ders_kitabi":  ["ders kitabı","meb yayınları","öğrenci kitabı","alıştırma","etkinlik","sayfa"],
 }
 
 
-def anahtar_ile_siniflandir(metin: str) -> str:
-    ml = metin.lower()
+def belge_siniflandir(dosya: Path) -> str:
+    """Dosya adı ve içeriğinden tür tahmin eder. Gemini kullanmaz."""
+    ad = dosya.stem.lower().replace(" ", "_").replace(".", "_")
+
+    # 1. Dosya adından kesin kural
+    for pattern, tur in AD_KURALLARI:
+        if re.search(pattern, ad):
+            return tur
+
+    # 2. İçerik anahtar kelimeleri
+    metin = dosya_oku(dosya)
+    if not metin:
+        return "diger"
+
+    metin_l = metin.lower()
     sayimlar = {}
-    for tur, kelimeler in ANAHTAR_KELIMELER.items():
-        s = sum(1 for k in kelimeler if k in ml)
+    for tur, kelimeler in ICERIK_ANAHTARLARI.items():
+        s = sum(1 for k in kelimeler if k in metin_l)
         if s > 0:
             sayimlar[tur] = s
     return max(sayimlar, key=sayimlar.get) if sayimlar else "diger"
 
 
-def belge_siniflandir(dosya: Path) -> str:
-    """Dosya adı ve içeriğinden tür tahmin eder. Gemini kullanmaz — kota tasarrufu."""
-    ad = dosya.stem.lower()
-    # 1. Dosya adından tahmin
-    for tur, kelimeler in ANAHTAR_KELIMELER.items():
-        for k in kelimeler:
-            if k.replace(" ","") in ad.replace(" ",""):
-                return tur
-    # 2. İçerik anahtar kelimelerinden tahmin
-    metin = dosya_oku(dosya)
-    if not metin:
-        return "diger"
-    return anahtar_ile_siniflandir(metin)
-
-
 class BelgeYoneticisi:
     def __init__(self, girdi_klasoru: Path):
-        self.girdi        = girdi_klasoru
-        self.eski_lokal   = girdi_klasoru / "eski_belgeler"
-        self.yeni_lokal   = girdi_klasoru / "yeni_belgeler"
-        self._gecici      = Path(tempfile.mkdtemp())
-        self._cache       = {}
-
+        self.girdi      = girdi_klasoru
+        self.eski_lokal = girdi_klasoru / "eski_belgeler"
+        self.yeni_lokal = girdi_klasoru / "yeni_belgeler"
+        self._gecici    = Path(tempfile.mkdtemp())
+        self._cache     = {}
         self.eski_lokal.mkdir(parents=True, exist_ok=True)
         self.yeni_lokal.mkdir(parents=True, exist_ok=True)
 
     def _drive_indir(self, tip: str) -> list[Path]:
-        """Drive'dan ilgili klasörü indirir."""
         try:
             from drive_okuyucu import drive_klasor_oku, drive_aktif, DRIVE_YENI, DRIVE_ESKI
             if not drive_aktif():
@@ -77,8 +76,7 @@ class BelgeYoneticisi:
             klasor_id = DRIVE_YENI if tip == "yeni" else DRIVE_ESKI
             if not klasor_id:
                 return []
-            gecici = self._gecici / tip
-            return drive_klasor_oku(klasor_id, gecici)
+            return drive_klasor_oku(klasor_id, self._gecici / tip)
         except Exception as e:
             print(f"   ⚠  Drive bağlantısı: {e}")
             return []
@@ -87,22 +85,16 @@ class BelgeYoneticisi:
         if tip in self._cache:
             return self._cache[tip]
 
-        # Önce Drive
         drive_dosyalar = self._drive_indir(tip)
-
-        # Sonra lokal GitHub klasörü
         lokal = self.yeni_lokal if tip == "yeni" else self.eski_lokal
         lokal_dosyalar = klasor_tara(lokal)
-
         tum_dosyalar = drive_dosyalar + lokal_dosyalar
 
         sonuc = {}
         for dosya in tum_dosyalar:
             tur = belge_siniflandir(dosya)
-            if tur not in sonuc:
-                sonuc[tur] = []
-            sonuc[tur].append(dosya)
-            print(f"   📄 {dosya.name} → {tur}")
+            sonuc.setdefault(tur, []).append(dosya)
+            print(f"   📄 {dosya.name[:50]} → {tur}")
 
         self._cache[tip] = sonuc
         return sonuc
@@ -121,13 +113,55 @@ class BelgeYoneticisi:
 
     def yillik_plan_metni(self, model: str = "normal") -> str:
         dosyalar = self.tur_dosyalari("yillik_plan", "yeni")
-        if not dosyalar:
-            return ""
         return "\n".join(dosya_oku(d) for d in dosyalar)
 
     def onceki_tutanak_metni(self, tur: str) -> str:
         dosyalar = self.tur_dosyalari(tur, "eski")
         return "\n".join(dosya_oku(d) for d in dosyalar[-2:])
+
+    def eski_plan_metni(self, sinif_seviyesi: str) -> str:
+        """Eski günlük planlardan belirli sınıf seviyesinin örneklerini döndürür."""
+        dosyalar = self.tur_dosyalari("gunluk_plan", "eski")
+        ilgili = [d for d in dosyalar if sinif_seviyesi in d.name.lower()]
+        if not ilgili:
+            ilgili = dosyalar[:2]
+        return "\n---\n".join(dosya_oku(d) for d in ilgili[:2])
+
+    def ders_kitabi_bolumleri(self, sinif_seviyesi: str, konu: str) -> str:
+        """
+        İlgili sınıfın ders kitabından konuyla ilgili bölümleri çeker.
+        Etkinlik ve değerlendirme sorularını da içerir.
+        """
+        dosyalar = self.tur_dosyalari("ders_kitabi", "yeni")
+        # Sınıf seviyesine göre kitabı bul
+        ilgili = [d for d in dosyalar if sinif_seviyesi in d.name.lower()]
+        if not ilgili:
+            ilgili = dosyalar
+
+        if not ilgili:
+            return ""
+
+        konu_anahtar = konu.lower()[:30]
+        for kitap in ilgili:
+            metin = dosya_oku(kitap)
+            if not metin:
+                continue
+            # Konuyla ilgili bölümleri bul
+            satirlar = metin.split("\n")
+            ilgili_satirlar = []
+            yakalandi = False
+            for satir in satirlar:
+                if konu_anahtar in satir.lower():
+                    yakalandi = True
+                if yakalandi:
+                    ilgili_satirlar.append(satir)
+                    if len(ilgili_satirlar) > 60:
+                        break
+
+            if ilgili_satirlar:
+                return "\n".join(ilgili_satirlar[:60])
+
+        return ""
 
     def ozet(self):
         print("\n   📁 YENİ BELGELER:")
