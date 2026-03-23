@@ -39,11 +39,16 @@ class GunlukPlanUretici:
         self.cikti_klasoru = cikti_klasoru
         self.cikti_klasoru.mkdir(parents=True, exist_ok=True)
 
-    def _gemini_den_al(self, sinif, konu, kazanim, model) -> dict:
-        """Gemini'den ders akışı ve etkinlikleri alır. Başarısız olursa {} döner."""
+    def _gemini_den_al(self, sinif, konu, kazanim, model,
+                        kitap_icerigi="", eski_plan="") -> dict:
+        """Groq'tan ders akışı alır. Ders kitabı ve eski plan da verilir."""
         try:
             from gemini_ai import gunluk_plan_olustur
-            return gunluk_plan_olustur(sinif, self.konfig["ders"], konu, kazanim, model) or {}
+            return gunluk_plan_olustur(
+                sinif, self.konfig["ders"], konu, kazanim, model,
+                kitap_icerigi=kitap_icerigi,
+                eski_plan=eski_plan
+            ) or {}
         except Exception:
             return {}
 
@@ -58,8 +63,12 @@ class GunlukPlanUretici:
         gun_adi   = GUNLER_TR.get(tarih.weekday(), "")
         yil_donem = f"{tarih.year}-{tarih.year+1} {'1.' if tarih.month >= 9 else '2.'} Dönem"
 
-        # ── Gemini'den akıllı içerik al ──
-        ai = self._gemini_den_al(sinif, konu, kazanim, model)
+        # ── Groq'tan akıllı içerik al (kitap + eski plan dahil) ──
+        kitap_icerigi = ders_bilgisi.get("kitap_icerigi", "")
+        eski_plan     = ders_bilgisi.get("eski_plan", "")
+        ai = self._gemini_den_al(sinif, konu, kazanim, model,
+                                  kitap_icerigi=kitap_icerigi,
+                                  eski_plan=eski_plan)
         if ai:
             ders_akisi = [(d["sure"], d["asama"], d["etkinlik"])
                           for d in ai.get("ders_akisi", [])] or DERS_AKISI_SABLON
