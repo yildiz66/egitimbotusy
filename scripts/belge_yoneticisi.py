@@ -43,26 +43,17 @@ def anahtar_ile_siniflandir(metin: str) -> str:
 
 
 def belge_siniflandir(dosya: Path) -> str:
+    """Dosya adı ve içeriğinden tür tahmin eder. Gemini kullanmaz — kota tasarrufu."""
     ad = dosya.stem.lower()
+    # 1. Dosya adından tahmin
     for tur, kelimeler in ANAHTAR_KELIMELER.items():
         for k in kelimeler:
             if k.replace(" ","") in ad.replace(" ",""):
                 return tur
+    # 2. İçerik anahtar kelimelerinden tahmin
     metin = dosya_oku(dosya)
     if not metin:
         return "diger"
-    # Gemini ile dene
-    try:
-        from gemini_ai import _api_cagir
-        prompt = f"Dosya adı: {dosya.name}\nİçerik: {metin[:300]}\n\nBu belge hangi tür? Sadece şunu yaz: yillik_plan / sok / zumre / veli / rehberlik / ders_kitabi / ders_programi / diger"
-        yanit = _api_cagir([{"text": prompt}], max_token=20)
-        if yanit:
-            yanit = yanit.strip().lower()
-            for tur in ANAHTAR_KELIMELER:
-                if tur in yanit:
-                    return tur
-    except Exception:
-        pass
     return anahtar_ile_siniflandir(metin)
 
 
