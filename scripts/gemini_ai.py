@@ -1,10 +1,11 @@
 """
-AI Modülü — Groq (Birincil) + Gemini (Yedek)
-==============================================
-Groq: Günlük 14,400 istek — ücretsiz, çok hızlı
-Gemini: Yedek olarak kullanılır
+AI Modülü — Groq
+================
+Groq: Günlük 14,400 istek — tamamen ücretsiz
+Model: llama-3.3-70b-versatile (Türkçe çok iyi)
 
-Groq modeli: llama-3.3-70b-versatile (Türkçe çok iyi)
+API Key: console.groq.com → ücretsiz hesap → API Keys
+GitHub Secret: GROQ_API_KEY
 """
 
 import os
@@ -12,20 +13,16 @@ import json
 import re
 import requests
 
-GROQ_API_KEY   = os.getenv("GROQ_API_KEY", "")
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 GROQ_MODEL   = "llama-3.3-70b-versatile"
 GROQ_URL     = "https://api.groq.com/openai/v1/chat/completions"
-GEMINI_URL   = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 
-# Cache — aynı konu için tekrar çağrı yapma
 _PLAN_CACHE = {}
 
 
 def _groq_cagir(prompt: str, max_token: int = 2000) -> str:
-    """Groq API çağrısı."""
     if not GROQ_API_KEY:
+        print("   ⚠  GROQ_API_KEY eksik — şablon kullanılıyor.")
         return ""
     try:
         r = requests.post(
@@ -45,52 +42,23 @@ def _groq_cagir(prompt: str, max_token: int = 2000) -> str:
         if r.status_code == 200:
             return r.json()["choices"][0]["message"]["content"].strip()
         elif r.status_code == 429:
-            print("   ⚠  Groq kota doldu — Gemini'ye geçiliyor.")
-            return ""
+            print("   ⚠  Groq kota doldu — şablon kullanılıyor.")
+        elif r.status_code == 401:
+            print("   ⚠  Groq API key geçersiz!")
         else:
-            print(f"   ⚠  Groq hata {r.status_code}")
-            return ""
+            print(f"   ⚠  Groq hata {r.status_code}: {r.text[:100]}")
+        return ""
     except Exception as e:
         print(f"   ⚠  Groq bağlantı hatası: {e}")
         return ""
 
 
-def _gemini_cagir(prompt: str, max_token: int = 2000) -> str:
-    """Gemini API yedek çağrısı."""
-    if not GEMINI_API_KEY:
-        return ""
-    try:
-        r = requests.post(
-            f"{GEMINI_URL}?key={GEMINI_API_KEY}",
-            json={
-                "contents": [{"parts": [{"text": prompt}]}],
-                "generationConfig": {"maxOutputTokens": max_token, "temperature": 0.3}
-            },
-            timeout=30,
-        )
-        if r.status_code == 200:
-            return r.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
-        elif r.status_code == 429:
-            print("   ⚠  Gemini de kota doldu — şablon kullanılıyor.")
-        return ""
-    except Exception:
-        return ""
-
-
-def _ai_cagir(prompt: str, max_token: int = 2000) -> str:
-    """Önce Groq, başarısız olursa Gemini dener."""
-    yanit = _groq_cagir(prompt, max_token)
-    if yanit:
-        return yanit
-    return _gemini_cagir(prompt, max_token)
-
-
-def _json_cikart(metin: str) -> dict | list | None:
+def _json_cikart(metin: str) -> dict | None:
     temiz = re.sub(r"```json|```", "", metin).strip()
     try:
         return json.loads(temiz)
     except Exception:
-        m = re.search(r"\{.*\}|\[.*\]", temiz, re.DOTALL)
+        m = re.search(r"\{.*\}", temiz, re.DOTALL)
         if m:
             try:
                 return json.loads(m.group())
@@ -102,7 +70,7 @@ def _json_cikart(metin: str) -> dict | list | None:
 def gunluk_plan_olustur(sinif: str, ders: str, konu: str,
                          kazanim: str, model: str, sure_dk: int = 80) -> dict:
     """Kazanıma özel ders akışı. Cache ile kota tasarrufu."""
-    if not (GROQ_API_KEY or GEMINI_API_KEY) or not konu:
+    if not GROQ_API_KEY or not konu:
         return {}
 
     seviye    = sinif.split("-")[0]
@@ -113,9 +81,9 @@ def gunluk_plan_olustur(sinif: str, ders: str, konu: str,
         return _PLAN_CACHE[cache_key]
 
     model_notu = (
-        "Maarif modeli — değerler eğitimi ekle."
+        "Maarif modeli — değerler eğitimi ve Maarif vizyonuna uygun etkinlikler ekle."
         if model == "maarif" else
-        "MEB normal müfredatı."
+        "MEB normal müfredatına uygun etkinlikler."
     )
 
     prompt = f"""Türk ortaokulu {seviye}. sınıf için {sure_dk} dakikalık ders planı hazırla.
@@ -139,7 +107,7 @@ SADECE JSON döndür, başka hiçbir şey yazma:
 }}"""
 
     print(f"   🤖 Groq plan yazıyor: {seviye}. sınıf — {konu[:40]}")
-    yanit = _ai_cagir(prompt, max_token=1500)
+    yanit = _groq_cagir(prompt, max_token=1500)
     sonuc = _json_cikart(yanit) or {}
     if sonuc:
         _PLAN_CACHE[cache_key] = sonuc
@@ -148,8 +116,7 @@ SADECE JSON döndür, başka hiçbir şey yazma:
 
 def tutanak_doldur(tur: str, ay: str, yil: int,
                    onceki_metin: str = "", sinif_bilgisi: str = "") -> dict:
-    """Tutanak gündem ve kararlarını doldurur."""
-    if not (GROQ_API_KEY or GEMINI_API_KEY):
+    if not GROQ_API_KEY:
         return {}
 
     tur_ad = {
@@ -175,36 +142,30 @@ SADECE JSON döndür:
 }}"""
 
     print(f"   🤖 Groq tutanak dolduruyor: {tur_ad}")
-    yanit = _ai_cagir(prompt, max_token=1000)
+    yanit = _groq_cagir(prompt, max_token=1000)
     return _json_cikart(yanit) or {}
 
 
 def rehberlik_yorum_olustur(sinif: str, ay: str, tema: str,
                               etkinlikler: list, notlar: str = "") -> str:
-    """Rehberlik raporu yorum bölümü yazar."""
-    if not (GROQ_API_KEY or GEMINI_API_KEY):
+    if not GROQ_API_KEY:
         return ""
     prompt = f"""{sinif} sınıfı {ay} ayı rehberlik raporu yorumu yaz.
 Tema: {tema} | Etkinlikler: {', '.join(etkinlikler)}
 2-3 paragraf, resmi Türkçe. Sadece metin döndür."""
-    return _ai_cagir(prompt, max_token=400)
+    return _groq_cagir(prompt, max_token=400)
 
 
-def ai_kontrol() -> bool:
-    """Bağlantı testi."""
-    if GROQ_API_KEY:
-        yanit = _groq_cagir("Sadece OK yaz.", max_token=5)
-        if yanit:
-            print("   ✓  Groq bağlantısı başarılı.")
-            return True
-    if GEMINI_API_KEY:
-        yanit = _gemini_cagir("Sadece OK yaz.", max_token=5)
-        if yanit:
-            print("   ✓  Gemini yedek bağlantısı başarılı.")
-            return True
-    print("   ⚠  AI bağlantısı yok — şablon kullanılacak.")
+def gemini_kontrol() -> bool:
+    """Groq bağlantı testi."""
+    if not GROQ_API_KEY:
+        print("   ⚠  GROQ_API_KEY eksik!")
+        print("      → console.groq.com → ücretsiz hesap → API Keys")
+        print("      → GitHub Secrets → GROQ_API_KEY olarak ekle")
+        return False
+    yanit = _groq_cagir("Sadece OK yaz.", max_token=5)
+    if yanit:
+        print("   ✓  Groq bağlantısı başarılı.")
+        return True
+    print("   ✗  Groq bağlantısı başarısız.")
     return False
-
-
-# Geriye dönük uyumluluk
-gemini_kontrol = ai_kontrol
