@@ -14,7 +14,11 @@ Tesseract kurulu değilse PIL ile temel metin çıkarımı denenir.
 
 import re
 import json
+import logging
 from pathlib import Path
+
+# PDF okuma hatalarını/uyarılarını sustur
+logging.getLogger("pdfminer").setLevel(logging.ERROR)
 
 # ── Kütüphane kontrolleri ──
 try:

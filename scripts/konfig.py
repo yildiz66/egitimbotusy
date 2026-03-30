@@ -29,6 +29,7 @@ TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID",   "")
 # YENİ: İki klasör sistemi ve Tarih bazlı çıktı
 simdi = datetime.now()
 klasor_eki = f"{simdi.year}-{simdi.month:02d}"
+DOCS = BASE / "docs"
 
 GIRDI = {
     "eski_belgeler":  BASE / "girdi" / "eski_belgeler",
@@ -36,14 +37,13 @@ GIRDI = {
     "ders_programi":  BASE / "girdi" / "ders_programi",
 }
 CIKTI = {
-    "ana":            BASE / "cikti" / klasor_eki,
-    "gunluk_planlar": BASE / "cikti" / klasor_eki / "gunluk_planlar",
-    "sok":            BASE / "cikti" / klasor_eki / "tutanaklar" / "sok",
-    "zumre":          BASE / "cikti" / klasor_eki / "tutanaklar" / "zumre",
-    "veli":           BASE / "cikti" / klasor_eki / "tutanaklar" / "veli",
-    "rehberlik":      BASE / "cikti" / klasor_eki / "rehberlik",
+    "ana":            DOCS / "cikti" / klasor_eki,
+    "gunluk_planlar": DOCS / "cikti" / klasor_eki / "gunluk_planlar",
+    "sok":            DOCS / "cikti" / klasor_eki / "tutanaklar" / "sok",
+    "zumre":          DOCS / "cikti" / klasor_eki / "tutanaklar" / "zumre",
+    "veli":           DOCS / "cikti" / klasor_eki / "tutanaklar" / "veli",
+    "rehberlik":      DOCS / "cikti" / klasor_eki / "rehberlik",
 }
-DOCS = BASE / "docs"
 
 for k in {**GIRDI, **CIKTI}.values():
     k.mkdir(parents=True, exist_ok=True)

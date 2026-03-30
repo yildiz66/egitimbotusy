@@ -11,9 +11,10 @@ from pathlib import Path
 from datetime import datetime
 
 BASE  = Path(__file__).parent.parent
-CIKTI_KOK = BASE / "cikti"
 DOCS  = BASE / "docs"
+CIKTI_KOK = DOCS / "cikti"
 DOCS.mkdir(exist_ok=True)
+CIKTI_KOK.mkdir(exist_ok=True)
 
 TUR_META = {
     "gunluk_planlar": {"etiket":"Günlük Plan", "renk":"blue",   "ikon":"📚"},
@@ -57,7 +58,7 @@ def dosya_tara() -> list:
             "boyut_kb": round(st.st_size / 1024, 1),
             "tarih":    tarih.strftime("%d.%m.%Y"),
             "tarih_ts": int(tarih.timestamp()),
-            "url":      "../" + str(yol.relative_to(BASE)).replace("\\", "/"),
+            "url":      str(yol.relative_to(DOCS)).replace("\\", "/"),
         })
     return sonuc
 
