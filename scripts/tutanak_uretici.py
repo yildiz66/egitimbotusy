@@ -88,11 +88,11 @@ class TutanakUretici:
 
         return gundemler[:6]
 
-    def aylik_kontrol(self, tarih: datetime) -> list:
+    def aylik_kontrol(self, tarih: datetime, force: bool = False) -> list:
         ay, yil = tarih.month, tarih.year
         uretilen = []
         for tur, meta in TOPLANTI_META.items():
-            if ay not in meta["aylar"]:
+            if not force and ay not in meta["aylar"]:
                 continue
             alt = self.cikti_klasoru / tur
             alt.mkdir(exist_ok=True)

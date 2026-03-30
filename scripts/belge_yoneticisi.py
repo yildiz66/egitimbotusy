@@ -18,7 +18,7 @@ AD_KURALLARI = [
     (r'veli.*top|top.*veli',           "veli"),
     (r'maarif.*rapor|degerlendirme.*rapor|aylik.*rapor', "rehberlik"),
     (r'rehberlik.*plan|pdr',           "rehberlik"),
-    (r'ders.*kitab|kitab.*fen|\d+.*sinif.*kitap|kitap.*\d+.*sinif', "ders_kitabi"),
+    (r'ders.*kitab|kitab.*fen|\d+.*sinif.*kitap|kitap.*\d+.*sinif|ogrenci.*kitap|kitap.*ogrenci', "ders_kitabi"),
     (r'yillik.*plan|cerc.*eve.*plan',  "yillik_plan"),
     (r'gunluk.*plan|plan.*gunluk',     "gunluk_plan"),
 ]
@@ -141,25 +141,39 @@ class BelgeYoneticisi:
         if not ilgili:
             return ""
 
-        konu_anahtar = konu.lower()[:30]
+        # Konu içinden anahtar kelimeler çıkart (en az 4 karakterli kelimeler)
+        anahtarlar = [k.lower() for k in konu.split() if len(k) > 3]
+        if not anahtarlar:
+            anahtarlar = [konu.lower()]
+
         for kitap in ilgili:
             metin = dosya_oku(kitap)
             if not metin:
                 continue
-            # Konuyla ilgili bölümleri bul
+            
             satirlar = metin.split("\n")
             ilgili_satirlar = []
             yakalandi = False
-            for satir in satirlar:
-                if konu_anahtar in satir.lower():
+            puan = 0
+            
+            # Daha akıllı arama: Anahtar kelimelerin çoğu geçiyorsa o bölümü al
+            for i, satir in enumerate(satirlar):
+                satir_l = satir.lower()
+                # En az 2 anahtar kelime veya tam konu geçiyorsa
+                if (sum(1 for a in anahtarlar if a in satir_l) >= min(2, len(anahtarlar))) or (konu.lower() in satir_l):
                     yakalandi = True
+                    # Bulunan yerden 20 satır öncesini de almayı dene (başlıklar için)
+                    baslangic = max(0, i - 10)
+                    ilgili_satirlar = satirlar[baslangic:i+1]
+                    continue
+                
                 if yakalandi:
                     ilgili_satirlar.append(satir)
-                    if len(ilgili_satirlar) > 60:
+                    if len(ilgili_satirlar) > 100: # 60 -> 100 satıra çıkarıldı
                         break
 
             if ilgili_satirlar:
-                return "\n".join(ilgili_satirlar[:60])
+                return "\n".join(ilgili_satirlar)
 
         return ""
 

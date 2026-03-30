@@ -38,11 +38,11 @@ class RehberlikUretici:
         self.rehberlik_plani = rehberlik_plani
         self.cikti_klasoru.mkdir(parents=True, exist_ok=True)
 
-    def aylik_kontrol(self, tarih: datetime) -> list:
+    def aylik_kontrol(self, tarih: datetime, force: bool = False) -> list:
         """Bu ay için rehberlik raporu yoksa üretir."""
         ay  = tarih.month
         yil = tarih.year
-        if ay not in AYLIK_PLAN:
+        if not force and ay not in AYLIK_PLAN:
             return []
         dosya_adi = f"Rehberlik_{self.konfig['rehberlik_sinif'].replace('-','')}_{yil}_{ay:02d}.docx"
         dosya_yolu = self.cikti_klasoru / dosya_adi

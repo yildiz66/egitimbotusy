@@ -39,7 +39,7 @@ def isgunu_bul(baslangic):
     return t
 
 
-def calistir(test=False, sadece="hepsi"):
+def calistir(test=False, sadece="hepsi", force=False):
     simdi = datetime.now()
     yarin = isgunu_bul(simdi + timedelta(days=1))
 
@@ -63,7 +63,6 @@ def calistir(test=False, sadece="hepsi"):
             print("   Yarin ders yok.")
         else:
             # Yıllık planı yeni belgelerden al
-            yillik_metni = belgeler.yillik_plan_metni()
             plan_okuyucu = YillikPlanOkuyucu(
                 Path(__file__).parent.parent / "girdi" / "yeni_belgeler"
             )
@@ -125,43 +124,25 @@ def calistir(test=False, sadece="hepsi"):
                     print(f"      {d['sinif']} {d['saat']} — {d['konu']}")
 
     # ── TUTANAKLAR ──
-    if sadece in ("hepsi", "tutanak") and (simdi.day == 1 or sadece == "tutanak"):
+    if sadece in ("hepsi", "tutanak") and (simdi.day == 1 or sadece == "tutanak" or force):
         print("\n[TUTANAK] Aylık kontrol...")
-
-        # Eski belgelerden tutanak geçmişini al
-        class EskiEvrakAdaptor:
-            def __init__(self, bm):
-                self.bm = bm
-            def sablon_ogren(self, tur):
-                metin = self.bm.onceki_tutanak_metni(tur)
-                if not metin:
-                    return {}
-                from evrak_ogrenici import EvrakOgrenici
-                from pathlib import Path
-                import tempfile, os
-                # Geçici dosya oluştur, EvrakOgrenici okusun
-                return {"ozel_gundemler": [], "karar_kaliplari": []}
 
         from tutanak_uretici import TOPLANTI_META
         uretilen = []
-        for tur in TOPLANTI_META:
-            alt = K.CIKTI.get(tur, K.CIKTI["gunluk_planlar"].parent / "tutanaklar" / tur)
-            alt.mkdir(parents=True, exist_ok=True)
-            u = TutanakUretici(KONFIG, K.GIRDI["eski_belgeler"], alt.parent)
-            u.cikti_klasoru = alt.parent
-            sonuc = u.aylik_kontrol(simdi)
-            uretilen.extend(sonuc)
+        # TutanakUretici'yi bir kez oluştur, o tüm türleri halletsin
+        u = TutanakUretici(KONFIG, K.GIRDI["eski_belgeler"], K.CIKTI["ana"] / "tutanaklar")
+        uretilen = u.aylik_kontrol(simdi, force=force)
 
         if uretilen and not test:
             tutanak_bildirimi_gonder(K.AYLAR_TR[simdi.month], uretilen)
         print(f"   OK  {len(uretilen)} tutanak.")
 
     # ── REHBERLİK ──
-    if sadece in ("hepsi", "rehberlik") and (simdi.day == 1 or sadece == "rehberlik"):
+    if sadece in ("hepsi", "rehberlik") and (simdi.day == 1 or sadece == "rehberlik" or force):
         print("\n[REHBERLİK] Aylık kontrol...")
         r = RehberlikUretici(KONFIG, K.CIKTI["rehberlik"],
             Path(__file__).parent.parent / "girdi" / "yeni_belgeler")
-        uretilen = r.aylik_kontrol(simdi)
+        uretilen = r.aylik_kontrol(simdi, force=force)
         if uretilen and not test:
             rehberlik_bildirimi_gonder(K.AYLAR_TR[simdi.month], uretilen)
         print(f"   OK  {len(uretilen)} rehberlik raporu.")
@@ -178,7 +159,8 @@ def calistir(test=False, sadece="hepsi"):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--test",   action="store_true")
+    ap.add_argument("--force",  action="store_true", help="Tarih kontrolünü atla")
     ap.add_argument("--sadece", default="hepsi",
                     choices=["hepsi","plan","tutanak","rehberlik"])
     args = ap.parse_args()
-    calistir(test=args.test, sadece=args.sadece)
+    calistir(test=args.test, sadece=args.sadece, force=args.force)

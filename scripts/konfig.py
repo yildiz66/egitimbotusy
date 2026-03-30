@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from datetime import datetime
 
 BASE = Path(__file__).parent.parent
 
@@ -25,18 +26,22 @@ SINIFLAR = sinif_modeli_parse(SINIF_LISTESI)
 TELEGRAM_TOKEN   = os.getenv("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID",   "")
 
-# YENİ: İki klasör sistemi
+# YENİ: İki klasör sistemi ve Tarih bazlı çıktı
+simdi = datetime.now()
+klasor_eki = f"{simdi.year}-{simdi.month:02d}"
+
 GIRDI = {
     "eski_belgeler":  BASE / "girdi" / "eski_belgeler",
     "yeni_belgeler":  BASE / "girdi" / "yeni_belgeler",
     "ders_programi":  BASE / "girdi" / "ders_programi",
 }
 CIKTI = {
-    "gunluk_planlar": BASE / "cikti" / "gunluk_planlar",
-    "sok":            BASE / "cikti" / "tutanaklar" / "sok",
-    "zumre":          BASE / "cikti" / "tutanaklar" / "zumre",
-    "veli":           BASE / "cikti" / "tutanaklar" / "veli",
-    "rehberlik":      BASE / "cikti" / "rehberlik",
+    "ana":            BASE / "cikti" / klasor_eki,
+    "gunluk_planlar": BASE / "cikti" / klasor_eki / "gunluk_planlar",
+    "sok":            BASE / "cikti" / klasor_eki / "tutanaklar" / "sok",
+    "zumre":          BASE / "cikti" / klasor_eki / "tutanaklar" / "zumre",
+    "veli":           BASE / "cikti" / klasor_eki / "tutanaklar" / "veli",
+    "rehberlik":      BASE / "cikti" / klasor_eki / "rehberlik",
 }
 DOCS = BASE / "docs"
 

@@ -11,7 +11,7 @@ from pathlib import Path
 from datetime import datetime
 
 BASE  = Path(__file__).parent.parent
-CIKTI = BASE / "cikti"
+CIKTI_KOK = BASE / "cikti"
 DOCS  = BASE / "docs"
 DOCS.mkdir(exist_ok=True)
 
@@ -26,10 +26,25 @@ TUR_META = {
 
 def dosya_tara() -> list:
     sonuc = []
-    for yol in sorted(CIKTI.rglob("*.docx"), reverse=True):
+    # Tüm cikti/ klasörünü tara (tarih bazlı alt klasörler dahil)
+    for yol in sorted(CIKTI_KOK.rglob("*.docx"), reverse=True):
+        # Klasör yapısından türü anla: .../YYYY-MM/tür/...
+        # yol.parts'tan sondan bir önceki veya iki önceki klasörü kontrol et
         tur = yol.parent.name
-        if tur == "tutanaklar":
-            tur = "tutanaklar"
+        if tur in ("sok", "zumre", "veli"):
+            pass # Doğru
+        elif tur == "tutanaklar":
+            # Eğer dosya doğrudan tutanaklar içindeyse (olmamalı ama önlem)
+            tur = "sok"
+        elif tur == "gunluk_planlar":
+            pass
+        elif tur == "rehberlik":
+            pass
+        else:
+            # Diğer durumlarda meta veriden kontrol et
+            meta_key = next((k for k in TUR_META if k in yol.name.lower()), "diger")
+            tur = meta_key
+
         meta = TUR_META.get(tur, {"etiket": tur, "renk": "gray", "ikon": "📄"})
         st   = yol.stat()
         tarih = datetime.fromtimestamp(st.st_mtime)

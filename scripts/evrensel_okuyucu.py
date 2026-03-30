@@ -114,13 +114,36 @@ def excel_tablo_oku(dosya: Path) -> list[list]:
 def pdf_oku(dosya: Path) -> str:
     if not PDF_OK:
         return ""
-    metin = ""
+    metin_parcalari = []
+    ocr_gerekiyor = False
+    
     with pdfplumber.open(dosya) as pdf:
         for sayfa in pdf.pages:
             t = sayfa.extract_text()
-            if t:
-                metin += t + "\n"
-    return metin.strip()
+            if t and len(t.strip()) > 10:
+                # Satır sonlarını koru ama gereksiz boşlukları temizle
+                temiz = "\n".join(s.strip() for s in t.split("\n") if s.strip())
+                metin_parcalari.append(temiz)
+            else:
+                ocr_gerekiyor = True
+                
+    # Eğer hiç metin bulunamadıysa ve OCR varsa, ilk birkaç sayfayı OCR ile dene
+    if ocr_gerekiyor and not metin_parcalari and OCR_OK and PIL_OK:
+        print(f"   🔍 {dosya.name} metin içermiyor, OCR deneniyor...")
+        # Bu işlem ağır olduğu için sadece ilk 10 sayfayı dene (ders kitabı için genellikle yeterli)
+        import pdf2image # Eğer yüklüyse
+        try:
+            # pdfplumber objesini resme çevirip OCR yapabiliriz
+            with pdfplumber.open(dosya) as pdf:
+                for i, sayfa in enumerate(pdf.pages[:5]): # Sadece ilk 5 sayfa
+                    img = sayfa.to_image(resolution=150).original
+                    t = pytesseract.image_to_string(img, lang="tur+eng")
+                    if t:
+                        metin_parcalari.append(t.strip())
+        except Exception as e:
+            print(f"   ⚠  PDF OCR hatası: {e}")
+
+    return "\n\n".join(metin_parcalari).strip()
 
 
 def gorsel_oku(dosya: Path) -> str:

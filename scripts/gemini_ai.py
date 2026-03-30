@@ -101,8 +101,11 @@ def gunluk_plan_olustur(sinif: str, ders: str, konu: str,
 
     # Ders kitabı ve eski plan bilgilerini ekle
     ek_bilgi = ""
-    if kitap_icerigi:
-        ek_bilgi += "\n\nDERS KİTABI İÇERİĞİ (etkinlik ve sorular dahil):\n" + kitap_icerigi[:800]
+    if kitap_icerigi and len(kitap_icerigi.strip()) > 50:
+        ek_bilgi += "\n\nDERS KİTABI İÇERİĞİ (Bu bölüme sadık kal, etkinlikleri plana ekle):\n" + kitap_icerigi[:1500]
+    else:
+        ek_bilgi += "\n\n(Not: Ders kitabı içeriği bulunamadı, genel MEB müfredatına ve kazanım açıklamasına göre yaratıcı bir plan oluştur.)"
+    
     if eski_plan:
         ek_bilgi += "\n\nÖNCEKİ YIL BENZER PLAN ÖRNEĞİ (stilini kullan):\n" + eski_plan[:600]
 

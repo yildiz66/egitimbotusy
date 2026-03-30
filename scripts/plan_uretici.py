@@ -149,9 +149,22 @@ class GunlukPlanUretici:
         # ── Maarif ek bölüm ──
         if model == "maarif":
             bolum_basligi(doc, "MAALİF MODELİ — EK GEREKLİLİKLER", renk=ana_renk)
+            
+            maarif_verisi = [
+                ("Öğrenme Çıktısı",     ai.get("ogrenme_ciktisi", "—")),
+                ("Süreç Bileşenleri",   ai.get("surec_bilesenleri", "—")),
+                ("Eğilimler",           ai.get("egilimler", "—")),
+                ("Kavramsal Beceriler", ai.get("kavramsal_beceriler", "—")),
+                ("Sosyal-Duygusal",     ai.get("sosyal_duygusal", "—")),
+                ("Erdem-Değer-Eylem",   ai.get("erdem_deger_eylem", "—")),
+                ("Öğrenme Kanıtları",   ai.get("ogrenme_kanitlari", "—")),
+                ("Zenginleştirme",      ai.get("farklilaştirma_zenginlestirme", "—")),
+                ("Destekleme",          ai.get("farklilaştirma_destekleme", "—")),
+            ]
+            
             tablo_olustur(doc,
-                basliklar=["Başlık", "İçerik"],
-                satirlar=[[b, i] for b, i in MAARIF_EK],
+                basliklar=["Bileşen", "Açıklama / Detay"],
+                satirlar=maarif_verisi,
                 baslik_rengi=ana_renk, satir_renkleri=(ac_renk, "FFFFFF")
             )
             paragraf_ekle(doc, "", sonra=4)
